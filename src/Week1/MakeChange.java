@@ -13,7 +13,7 @@ public class MakeChange {
 
 		System.out.print("Please enter the payment amount: ");
 		double amountTendered = kb.nextDouble();
-		System.out.println("Your change today is: " );
+		System.out.println("Your change today is: ");
 
 		if (isAmountTenderedMoreThanPrice(price, amountTendered)) {
 
@@ -104,9 +104,8 @@ public class MakeChange {
 		} else if (coinChangeAmount >= .25 && coinChangeAmount < .5) {
 			return 1;
 		} else {
-			System.out.println("error determining quarters: " + coinChangeAmount);
 		}
-			return 0;
+		return 0;
 	}
 
 	private static int determineHowManyDimes(Double coinChangeAmount) {
@@ -115,6 +114,7 @@ public class MakeChange {
 		} else if (coinChangeAmount >= .1 && coinChangeAmount < .2) {
 			return 1;
 		} else if (coinChangeAmount >= .2 && coinChangeAmount < .25) {
+			return 2;
 		} else {
 			System.out.println("Error determing dimes: " + coinChangeAmount);
 		}
@@ -172,17 +172,20 @@ public class MakeChange {
 	}
 
 	private static void printFinalResults(int numBills, int numQuarters, int numDimes, int numNickels, int numPennies) {
-		
 
-	if (numBills > 0) {
-		System.out.println(numBills + " bills");
-	} if (numQuarters > 0) {
-		System.out.println(numQuarters + " quarters");
-	} if (numDimes > 0) {
-	System.out.println(numDimes + " dimes");
-	} if (numNickels > 0) {
-		System.out.println(numNickels + " nickels");
-		} if (numPennies > 0) {
+		if (numBills > 0) {
+			System.out.println(numBills + " bills");
+		}
+		if (numQuarters > 0) {
+			System.out.println(numQuarters + " quarters");
+		}
+		if (numDimes > 0) {
+			System.out.println(numDimes + " dimes");
+		}
+		if (numNickels > 0) {
+			System.out.println(numNickels + " nickels");
+		}
+		if (numPennies > 0) {
 			System.out.println(numPennies + " pennies");
 		}
 	}
