@@ -8,57 +8,180 @@ public class MakeChange {
 
 		Scanner kb = new Scanner(System.in);
 
-		double price = 0.0;
-		double cash = 0.0;
-		double penny = 0.0;
-		double nickel = 0.0;
-		double dime = 0.0;
-		double quarter = 0.0;
-		double dollar = 0.0;
-		double five = 0.0;
-		double ten = 0.0;
-		double twenty = 0.0;
 
 		System.out.print("Please enter the total of the item/s you want to purchase: ");
-		price = kb.nextDouble();
+		double price = kb.nextDouble();
+		
 		System.out.print("Please enter the payment amount: ");
-		cash = kb.nextDouble();
+		double amountTendered = kb.nextDouble();
 		System.out.print("Your change today is: ");
 
-		double change = (cash - price);
-		penny = change * 100;
-		nickel = penny / 5;
-		dime = penny / 10;
-		quarter = penny / 25;
-		dollar = penny / 100;
-		five = dollar / 5;
-		ten = dollar / 10;
-		twenty = dollar / 20;
+		if (isAmountTenderedMoreThanPrice(price, amountTendered)) {
 
-		if (cash == price) {
-			System.out.println("This is the exact amount, thanks have a nice day!");
+			if (isAmountSameAsPrice(price, amountTendered)) {
+				System.out.println("This is the exact amount.  Thanks and have a great day!");
+			} else {
+				System.out.println("You gave me more than enough!");
+			}
+
+			Double change = amountTendered - price;
+			change = cutToTwoDecimalPlaces(change);
+			int dollarAmount = (int) change.doubleValue();
+			Double dollarAmountD = Double.valueOf(dollarAmount);
+
+			Double coinChangeAmount = change - dollarAmountD;
+			coinChangeAmount = cutToTwoDecimalPlaces(coinChangeAmount);
+
+			int numQuarters = determineHowManyQuarters(coinChangeAmount);
+			Double coinsWithoutQuarters = updatePriceRemoveQuarters(numQuarters, coinChangeAmount);
+
+			coinsWithoutQuarters = cutToTwoDecimalPlaces(coinsWithoutQuarters);
+
+			int numDimes = determineHowManyDimes(coinsWithoutQuarters);
+			Double coinsWithoutDimes = updatePriceRemoveDimes(numDimes, coinsWithoutQuarters);
+			coinsWithoutDimes = cutToTwoDecimalPlaces(coinsWithoutDimes);
+
+			int numNickels = determineHowManyNickels(coinsWithoutDimes);
+			Double coinsWithoutNickels = 0.0D;
+			coinsWithoutNickels = updatePriceRemoveNickels(numNickels, coinsWithoutDimes);
+
+			Double penniesDouble = coinsWithoutNickels * 100.0;
+			int numPennies = (int) penniesDouble.doubleValue();
+
+			printFinalResults(dollarAmount, numQuarters, numDimes, numNickels, numPennies);
+
+		} else { 
+			System.out.println("You did not give me enough");
 		}
-		if (change < 0) {
-			System.out.println("This is not enough money to purchase this item, try again.");
-		} else if (twenty >= 20) {
-			System.out.println(twenty + " twenty dollar bills");
-		} else if (ten >= 10) {
-			System.out.println(ten + " ten dollar bills");
-		} else if (five >= 5) {
-			System.out.println(five + " five dollar bills");
-		} else if (dollar >= 1) {
-			System.out.println(dollar + " dollars");
-		} else if (quarter >= .25) {
-			System.out.println(quarter + " quarters");
-		} else if (dime >= .10) {
-			System.out.println(dime + " dimes");
-		} else if (nickel >= .05) {
-			System.out.println(nickel + " nickels");
-		} else if (penny >= .01) {
-			System.out.println(penny + " pennies");
+	}
+
+	private static double updatePriceRemoveNickels(int numN, Double beforePrice) {
+
+		Double pennies = 0.0d;
+
+		if (beforePrice >= .05) {
+			pennies = beforePrice - .05;
 		} else {
-			System.out.println("Invalid selection please try again.");
+			pennies = beforePrice;
 		}
-		kb.close();
+
+		return pennies;
+	}
+
+	private static double updatePriceRemoveDimes(int numD, Double beforePrice) {
+		Double dimeValue = Double.valueOf(numD);
+		dimeValue = dimeValue / 10.0;
+		Double r = beforePrice - dimeValue;
+
+		return r;
+	}
+
+private static double updatePriceRemoveQuarters(int numQ, Double beforePrice) {
+		Double quarterValue = 0.0D;
+
+		switch(numQ) {
+			case (1):
+				quarterValue = .25D;
+				break;
+			case(2): 
+				quarterValue = .5D;
+				break;
+			case (3):
+				quarterValue = .75D;
+				break;
+			case (0):
+				return beforePrice;
+			default:
+				System.out.println("WHAT THE FUCK ");
+				System.exit(0);
+		}
+		return beforePrice - quarterValue;
+}
+
+	private static int determineHowManyQuarters(Double coinChangeAmount) {
+			if (coinChangeAmount > .75) {
+				return 3;
+			}else if (coinChangeAmount >= .5 && coinChangeAmount < .75){
+				return 2;
+			} else if (coinChangeAmount >= .25 && coinChangeAmount < .5) {
+				return 1;
+			}else {
+				System.out.println("error determining quarters: " + coinChangeAmount );
+			return 0;
+		}
+	}
+
+	private static int determineHowManyDimes(Double coinChangeAmount) {
+		if(coinChangeAmount < .1) {
+			return 0;			
+		} else if (coinChangeAmount >= .1 && coinChangeAmount < .2) {
+			return 1;
+		} else if (coinChangeAmount >=.2 && coinChangeAmount < .25) {
+		} else {
+			System.out.println("Error determing dimes: " + coinChangeAmount);
+		}
+			return 9999;
+		}
+
+
+	private static int determineHowManyNickels(Double coinChangeAmount) {
+		if (coinChangeAmount < .05) {
+			return 0;
+		} else if (coinChangeAmount >= .05 && coinChangeAmount < .1) {
+			return 1;
+		} else {
+			System.out.println("Error determining nickels: " + coinChangeAmount);
+		}
+		return 999;
+	}
+	
+
+		
+	
+	private static int determineHowManyPennies(Double coinChangeAmount) {
+		System.out.println("Pennies: " + coinChangeAmount);
+		if (coinChangeAmount == 0.0) {
+			return 0;
+		} else if (coinChangeAmount > 0 && coinChangeAmount <= .04) {
+			coinChangeAmount = coinChangeAmount * 10.0;
+
+			int pennies = (int) coinChangeAmount.doubleValue();
+
+			return pennies;
+		}
+
+		return 9999;
+	}
+	
+
+private static boolean isAmountTenderedMoreThanPrice(Double p, Double a) {
+	if (a >= p) {
+		return true;
+	} else {
+		return false;
 	}
 }
+
+private static boolean isAmountSameAsPrice(Double price, Double amount) {
+	if (amount.equals(price)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+private static double cutToTwoDecimalPlaces(Double d) {
+	String sValue = (String) String.format("%.2f", d);
+		Double newValue = Double.parseDouble(sValue);
+
+		return newValue;
+}
+
+private static void printFinalResults(int numBills, int numQuarters , int numDimes , int numNickels , int numPennies) {
+	System.out.println(numBills + " bills " + numQuarters + " quarters " + numDimes + " dimes " + numNickels + " nickles " + numPennies + " pennies");
+
+}
+		
+}
+	
+	
