@@ -35,29 +35,30 @@ public class MakeChange {
 		ten = dollar / 10;
 		twenty = dollar / 20;
 
-		 if (cash == price) {
+		if (cash == price) {
 			System.out.println("This is the exact amount, thanks have a nice day!");
-		 }  if (change < 0) {
-			 System.out.println("This is not enough money to purchase this item, try again.");
-		 }  if (dollar >= 1) {
-			System.out.println(dollar + " dollars");
-		}  else if (quarter >= 1) {
-			System.out.println(quarter + " quarters");
-		}  else if (dime >= 1) {
-			System.out.println(dime + " dimes");
-		}  else if (nickel >= 1) {
-			System.out.println(nickel + " nickels");
-		} else if (five >= 1) {
-			System.out.println(five + " five dollar bills");
-		} else if (ten >= 1) {
-			System.out.println(ten + " ten dollar bills");
-		} else if (twenty >= 1) {
+		}
+		if (change < 0) {
+			System.out.println("This is not enough money to purchase this item, try again.");
+		} else if (twenty >= 20) {
 			System.out.println(twenty + " twenty dollar bills");
+		} else if (ten >= 10) {
+			System.out.println(ten + " ten dollar bills");
+		} else if (five >= 5) {
+			System.out.println(five + " five dollar bills");
+		} else if (dollar >= 1) {
+			System.out.println(dollar + " dollars");
+		} else if (quarter >= .25) {
+			System.out.println(quarter + " quarters");
+		} else if (dime >= .10) {
+			System.out.println(dime + " dimes");
+		} else if (nickel >= .05) {
+			System.out.println(nickel + " nickels");
+		} else if (penny >= .01) {
+			System.out.println(penny + " pennies");
 		} else {
 			System.out.println("Invalid selection please try again.");
-		
 		}
 		kb.close();
 	}
-
 }
